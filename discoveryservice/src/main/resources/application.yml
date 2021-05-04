@@ -12,6 +12,8 @@ eureka:
     enabled: true
   instance:
     hostname: localhost
+  server:
+    enable-self-preservation: false
 
 management:
   endpoint:

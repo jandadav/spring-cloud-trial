@@ -4,8 +4,22 @@ server:
 spring:
   application:
     name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # Enable RouteLocator to take from DiscoveryClient compliant registry (Eureka)
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoint:
+    gateway:
+      enabled: true # default value
+  endpoints:
+    web:
+      exposure:
+        include: '*'
