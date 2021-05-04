@@ -1,3 +1,4 @@
 rootProject.name = 'springCloudTrial'
 
 include 'simpleapiservice'
+include 'discoveryservice'
