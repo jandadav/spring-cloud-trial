@@ -173,3 +173,23 @@ Healthy route:
 The whole Gateway uses reactive patterns, so it would be good studying them upfront.
 
 it's built on https://projectreactor.io/
+
+Writing filters:
+https://www.baeldung.com/spring-cloud-custom-gateway-filters
+
+This is how a request through looks on API:
+```json
+{
+  "user-agent": "insomnia/2021.3.0",
+  "accept": "*/*",
+  "customheader": "customvalue",
+  "forwarded": "proto=http;host=\"localhost:9090\";for=\"0:0:0:0:0:0:0:1:54246\"",
+  "x-forwarded-for": "0:0:0:0:0:0:0:1",
+  "x-forwarded-proto": "http",
+  "x-forwarded-prefix": "/SIMPLEAPISERVICE",
+  "x-forwarded-port": "9090",
+  "x-forwarded-host": "localhost:9090",
+  "host": "FNPL0Z2:8081",
+  "content-length": "0"
+}
+```

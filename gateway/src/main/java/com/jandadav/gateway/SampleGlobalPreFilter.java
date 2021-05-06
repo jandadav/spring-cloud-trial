@@ -3,13 +3,11 @@ package com.jandadav.gateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
-import org.springframework.core.Ordered;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class SampleGlobalFilter implements GlobalFilter, Ordered {
+public class SampleGlobalPreFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         // This would be the filter's api and the arguments here are filter interaction points
@@ -19,8 +17,4 @@ public class SampleGlobalFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
-    @Override
-    public int getOrder() {
-        return -1;
-    }
 }

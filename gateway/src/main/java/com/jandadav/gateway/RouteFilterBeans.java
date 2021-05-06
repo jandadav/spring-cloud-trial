@@ -9,6 +9,24 @@ public class RouteFilterBeans {
 
     @Bean
     public GlobalFilter someGlobalFilter() {
-        return new SampleGlobalFilter();
+        return new SampleGlobalPreFilter();
+    }
+
+    @Bean
+    public GlobalFilter someGlobalPostFilter() {
+        return new SampleGlobalPostFilter();
+    }
+
+    /**
+     * mutate() api is used in filters that change something on req/resp
+     * filter can be declared inline as Lambda
+     * @return
+     */
+    @Bean
+    public GlobalFilter mutatingFilter() {
+        return (exchange, chain) -> {
+            exchange.getRequest().mutate().headers(h -> h.set("customheader", "customvalue"));
+            return chain.filter(exchange);
+        };
     }
 }
