@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SimpleapiserviceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="springCloudTrial.simpleapiservice.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.jandadav.simpleapiservice.SimpleapiserviceApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="spring.cloud.inetutils.preferredNetworks" />
+        <option name="value" value="127.0.0.1" />
+      </param>
+      <param>
+        <option name="name" value="spring.cloud.inetutils.use-only-site-local-interfaces" />
+        <option name="value" value="true" />
+      </param>
+    </additionalParameters>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
