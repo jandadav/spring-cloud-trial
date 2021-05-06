@@ -137,3 +137,7 @@ Healthy route:
 2021-05-06 12:54:47.720 DEBUG 23616 --- [ctor-http-nio-5] r.n.http.client.HttpClientOperations     : [id:f85a99ac-2, L:/10.57.8.91:58604 - R:FNPL0Z2/10.57.8.91:8080] Received response (auto-read:false) : [Content-Type=application/json, Transfer-Encoding=chunked, Date=Thu, 06 May 2021 10:54:47 GMT]
 2021-05-06 12:54:47.721 DEBUG 23616 --- [ctor-http-nio-5] r.n.http.client.HttpClientOperations     : [id:f85a99ac-2, L:/10.57.8.91:58604 - R:FNPL0Z2/10.57.8.91:8080] Received last HTTP packet
 ```
+
+The whole Gateway uses reactive patterns, so it would be good studying them upfront.
+
+it's built on https://projectreactor.io/
