@@ -13,8 +13,8 @@ spring:
     gateway:
       discovery:
         locator: #configures the discovery client route locator
-
-          enabled: true # Enable RouteLocator to take from DiscoveryClient compliant registry (Eureka)
+          # disable because custom route locator implemented
+          enabled: false # Enable RouteLocator to take from DiscoveryClient compliant registry (Eureka)
 
     loadbalancer:
       configurations: default
