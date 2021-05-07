@@ -14,8 +14,27 @@ spring:
       discovery:
         locator: #configures the discovery client route locator
           # disable because custom route locator implemented
-          enabled: false # Enable RouteLocator to take from DiscoveryClient compliant registry (Eureka)
+          enabled: false # Enable RouteLocator to take from DiscoveryClient compliant registry (Eureka) this one is for
+          #autoconfiguring bean
+          #the rest is for the copied RouteLocator and I hjacked the config object
 
+          #This is how defaults configure for DiscoveryClientRouteLocator. Customization Is Possible
+          predicates:
+             -
+              name: Path
+              args[pattern]: "'/'+serviceId+'/**'"
+          filters:
+            -
+              name: CircuitBreaker
+              args[name]: serviceId
+            -
+              name: RewritePath
+              args[regexp]: "'/' + serviceId + '/?(?<remaining>.*)'"
+              args[replacement]: "'/${remaining}'"
+
+      filter:
+        circuit-breaker:
+          enabled: true
     loadbalancer:
       configurations: default
 
