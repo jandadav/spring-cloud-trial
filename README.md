@@ -262,3 +262,26 @@ Recomended to use cache backed implementation, but with Eureka discovery client 
 Load balancer can do healthchecks, which might be a great thing for static services
 Static services: at the moment in Discovery, move to Gateway? Pros Cons?
 Otherwise not necessary with propper DiscoveryClient
+
+
+Sticky sessions:
+
+Request-based Sticky Session for LoadBalancer
+
+has to have `RequestBasedStickySessionServiceInstanceListSupplier` configured
+A session cookie based implementation of ServiceInstanceListSupplier that gives preference to the instance with an id specified in a request cookie.
+private String instanceIdCookieName = "sc-lb-instance-id";
+Works on cookie
+List of service instances `get(Request req)` needs request
+The supplier is a wrapper on top of delegate, which provides all instances.
+
+
+Hint-Based Load-Balancing
+
+hints are `String` property, global default and per service values possible
+HintBasedServiceInstanceListSupplier checks for a hint request header (the default header-name is `X-SC-LB-Hint`)
+It can also come from the `hint` key in service `metadataMap`, where we can put it with Filter.
+
+
+After load balancing, the reuqest can be further altered, but the implementation has to be client-specific. 
+But it is easily pluggable.
