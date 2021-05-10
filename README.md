@@ -193,3 +193,72 @@ This is how a request through looks on API:
   "content-length": "0"
 }
 ```
+
+
+Circuit breaker
+https://piotrminkowski.com/2019/12/11/circuit-breaking-in-spring-cloud-gateway-with-resilience4j/
+
+https://piotrminkowski.com/2020/02/23/timeouts-and-retries-in-spring-cloud-gateway/
+
+Routes with CircuitBreaker Filter
+```json
+[
+  {
+    "predicate": "Paths: [/GATEWAY/**], match trailing slash: true",
+    "metadata": {
+      "management.port": "9090"
+    },
+    "route_id": "ReactiveCompositeDiscoveryClient_GATEWAY",
+    "filters": [
+      "[[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'GATEWAY', fallback = [null]], order = 1]",
+      "[[RewritePath /GATEWAY/?(?<remaining>.*) = '/${remaining}'], order = 2]"
+    ],
+    "uri": "lb://GATEWAY",
+    "order": 0
+  },
+  {
+    "predicate": "Paths: [/DISCOVERY/**], match trailing slash: true",
+    "metadata": {
+      "management.port": "8761"
+    },
+    "route_id": "ReactiveCompositeDiscoveryClient_DISCOVERY",
+    "filters": [
+      "[[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'DISCOVERY', fallback = [null]], order = 1]",
+      "[[RewritePath /DISCOVERY/?(?<remaining>.*) = '/${remaining}'], order = 2]"
+    ],
+    "uri": "lb://DISCOVERY",
+    "order": 0
+  }
+]
+```
+
+
+Rate Limiting:
+is realized with Filter, requires Redis
+The Redis implementation is based off of work done at Stripe. It requires the use of the spring-boot-starter-data-redis-reactive Spring Boot starter.
+
+```yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: requestratelimiter_route
+        uri: https://example.org
+        filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestedTokens: 1
+```
+
+
+Spring cloud load balancer
+
+Basic service list for LB: ServiceInstanceListSupplier, retrieves instances every time.
+
+Recomended to use cache backed implementation, but with Eureka discovery client I believe that is void. The call will be made in-memory against the discovery client's cache.
+
+Load balancer can do healthchecks, which might be a great thing for static services
+Static services: at the moment in Discovery, move to Gateway? Pros Cons?
+Otherwise not necessary with propper DiscoveryClient
