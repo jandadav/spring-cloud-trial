@@ -46,7 +46,9 @@ have to start service with
 Reactor netty debug:
 `-Dreactor.netty.http.server.accessLogEnabled=true`
 
-- routes on GW: /actuator/gateway/routes
+All the filter and predicate configuration is deserializable from yaml. This is potentially inviting to offer the services to configure themselves.
+
+- routes on GW with Actuator: /actuator/gateway/routes
 
 Routes are created by enabling built-in route locator `spring.cloud.gateway.discovery.locator.enabled` or custom RouteLocator implementation. We will probably have to roll a custom implementation.
 
@@ -93,7 +95,7 @@ Routes are created by enabling built-in route locator `spring.cloud.gateway.disc
 
 https://spring.io/blog/2020/03/25/spring-tips-spring-cloud-loadbalancer
 
-Routing of request in debug
+### Routing of request in debug
 ```log
 2021-05-06 12:30:31.192 DEBUG 9524 --- [ctor-http-nio-5] o.s.c.g.h.RoutePredicateHandlerMapping   : Route matched: ReactiveCompositeDiscoveryClient_SIMPLEAPISERVICE
 2021-05-06 12:30:31.193 DEBUG 9524 --- [ctor-http-nio-5] o.s.c.g.h.RoutePredicateHandlerMapping   : Mapping [Exchange: GET http://localhost:9090/SIMPLEAPISERVICE] to Route{id='ReactiveCompositeDiscoveryClient_SIMPLEAPISERVICE', uri=lb://SIMPLEAPISERVICE, order=0, predicate=Paths: [/SIMPLEAPISERVICE/**], match trailing slash: true, gatewayFilters=[[[RewritePath /SIMPLEAPISERVICE/?(?<remaining>.*) = '/${remaining}'], order = 1]], metadata={management.port=8080}}
@@ -170,11 +172,12 @@ Healthy route:
 2021-05-06 12:54:47.721 DEBUG 23616 --- [ctor-http-nio-5] r.n.http.client.HttpClientOperations     : [id:f85a99ac-2, L:/10.57.8.91:58604 - R:FNPL0Z2/10.57.8.91:8080] Received last HTTP packet
 ```
 
+### Reactive stuffs
 The whole Gateway uses reactive patterns, so it would be good studying them upfront.
 
 it's built on https://projectreactor.io/
 
-Writing filters:
+###  Writing filters:
 https://www.baeldung.com/spring-cloud-custom-gateway-filters
 
 This is how a request through looks on API:
@@ -195,7 +198,7 @@ This is how a request through looks on API:
 ```
 
 
-Circuit breaker
+### Circuit breaker
 https://piotrminkowski.com/2019/12/11/circuit-breaking-in-spring-cloud-gateway-with-resilience4j/
 
 https://piotrminkowski.com/2020/02/23/timeouts-and-retries-in-spring-cloud-gateway/
@@ -233,7 +236,7 @@ Routes with CircuitBreaker Filter
 ```
 
 
-Rate Limiting:
+###  Rate Limiting:
 is realized with Filter, requires Redis
 The Redis implementation is based off of work done at Stripe. It requires the use of the spring-boot-starter-data-redis-reactive Spring Boot starter.
 
@@ -253,7 +256,7 @@ spring:
 ```
 
 
-Spring cloud load balancer
+## Spring cloud load balancer
 
 Basic service list for LB: ServiceInstanceListSupplier, retrieves instances every time.
 
@@ -264,9 +267,9 @@ Static services: at the moment in Discovery, move to Gateway? Pros Cons?
 Otherwise not necessary with propper DiscoveryClient
 
 
-Sticky sessions:
+### Sticky sessions:
 
-Request-based Sticky Session for LoadBalancer
+#### Request-based Sticky Session for LoadBalancer
 
 has to have `RequestBasedStickySessionServiceInstanceListSupplier` configured
 A session cookie based implementation of ServiceInstanceListSupplier that gives preference to the instance with an id specified in a request cookie.
@@ -276,12 +279,15 @@ List of service instances `get(Request req)` needs request
 The supplier is a wrapper on top of delegate, which provides all instances.
 
 
-Hint-Based Load-Balancing
+#### Hint-Based Load-Balancing
 
 hints are `String` property, global default and per service values possible
 HintBasedServiceInstanceListSupplier checks for a hint request header (the default header-name is `X-SC-LB-Hint`)
 It can also come from the `hint` key in service `metadataMap`, where we can put it with Filter.
 
-
+#### After load balancing
 After load balancing, the reuqest can be further altered, but the implementation has to be client-specific. 
 But it is easily pluggable.
+
+
+
