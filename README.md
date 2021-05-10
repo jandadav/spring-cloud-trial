@@ -236,6 +236,18 @@ Routes with CircuitBreaker Filter
 ```
 
 
+### Retry 
+
+The Retry GatewayFilter
+
+The following defaults are configured for Retry filter, if enabled:
+retries: Three times
+series: 5XX series
+methods: GET method
+exceptions: IOException and TimeoutException
+backoff: disabled
+
+
 ###  Rate Limiting:
 is realized with Filter, requires Redis
 The Redis implementation is based off of work done at Stripe. It requires the use of the spring-boot-starter-data-redis-reactive Spring Boot starter.
